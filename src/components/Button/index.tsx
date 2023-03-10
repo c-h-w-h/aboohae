@@ -7,7 +7,7 @@ import { DefaultProps } from '@utils/types/DefaultProps';
 import { CSSProperties } from 'react';
 
 type ButtonShapeVariant = 'round' | 'square';
-type ButtonThemeVariant = 'light';
+type ButtonThemeVariant = 'light' | 'dark';
 type ButtonVariant =
   | ButtonShapeVariant
   | ButtonThemeVariant

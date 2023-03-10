@@ -11,6 +11,7 @@ interface BadgeProps {
   color?: string;
   filled?: boolean;
   toggle?: boolean;
+  onClick?: () => void;
 }
 
 const Badge = ({
@@ -19,6 +20,7 @@ const Badge = ({
   color,
   filled = true,
   toggle,
+  onClick,
 }: BadgeProps) => {
   const [isFilled, setIsFilled] = useState(filled);
   const onToggle = () => setIsFilled((prev) => !prev);
@@ -26,7 +28,10 @@ const Badge = ({
   const props = {
     color,
     filled: isFilled,
-    onClick: toggle ? onToggle : undefined,
+    onClick: () => {
+      if (toggle) onToggle();
+      if (onClick) onClick();
+    },
   };
 
   return (
@@ -45,19 +50,21 @@ export default Badge;
 const BadgeContainer = styled.div<Omit<BadgeProps, 'children' | 'size'>>(
   ({ theme, color, filled }) => {
     const { color: themeColor } = theme;
-    const { white, primary100 } = themeColor;
+    const { white, primary100, primary200 } = themeColor;
 
     return {
       width: 'fit-content',
       padding: '8px 12px',
       borderRadius: 30,
-      border: filled ? 'none' : `1px solid ${color ?? primary100}`,
+      border: `1px solid ${primary100}`,
       color: filled ? white : color ?? primary100,
       backgroundColor: filled ? color ?? primary100 : 'transparent',
+      cursor: 'pointer',
 
       ':hover': {
-        color: filled ? color ?? primary100 : white,
-        backgroundColor: filled ? 'transparent' : color ?? primary100,
+        border: `1px solid ${primary200}`,
+        color: filled ? white : color ?? primary200,
+        backgroundColor: filled ? color ?? primary200 : 'transparent',
       },
     };
   },
