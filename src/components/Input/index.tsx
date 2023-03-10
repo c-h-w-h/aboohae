@@ -10,6 +10,7 @@ interface InputProps extends DefaultProps<HTMLInputElement> {
   isValid?: boolean;
   variant?: TypographyVariant;
   width?: CSSProperties['width'];
+  required?: boolean;
 }
 
 const Input = forwardRef(
@@ -19,15 +20,25 @@ const Input = forwardRef(
       name,
       placeholder = '입력하세요',
       isValid = true,
-      ...props
+      required = false,
+      ...p
     }: InputProps,
     ref,
   ) => {
+    const props = {
+      id,
+      placeholder,
+      isValid,
+      required,
+      'aria-required': required,
+      ...p,
+    };
+
     return (
       <InputContainer
         ref={ref as LegacyRef<HTMLInputElement>}
         name={name ? name : id}
-        {...{ id, placeholder, isValid, ...props }}
+        {...props}
       />
     );
   },
