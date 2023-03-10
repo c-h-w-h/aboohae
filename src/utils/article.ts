@@ -26,6 +26,8 @@ const changeArticleProperty = (
   });
 
   saveArticle(articles);
+
+  return articles.find(({ id }) => id === targetId);
 };
 
 export const bookmarkArticle = (targetId: number) =>
@@ -43,7 +45,10 @@ export const getArticles = (predicate?: (article: Article) => boolean) => {
   return predicate ? articles.filter(predicate) : articles;
 };
 
-export const getRandomArticle = (predicate?: (article: Article) => boolean) => {
+export const getRandomArticle = (
+  predicate: (article: Article) => boolean = (article) =>
+    article.readAt === undefined,
+) => {
   const filteredArticles = getArticles(predicate);
 
   if (!filteredArticles) return null;
