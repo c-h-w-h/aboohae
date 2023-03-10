@@ -18,13 +18,14 @@ const changeArticleProperty = (
   targetId: number,
   callback: (targetArticle: Article) => void,
 ) => {
-  const articles = getArticles();
-  const targetArticle = articles.find(({ id }) => id === targetId);
+  const articles = getArticles().map((article) => {
+    if (article.id === targetId) {
+      callback(article);
+    }
+    return article;
+  });
 
-  if (!targetArticle) throw new Error('찾는 아티클이 없습니다. 나쁜 유저 🚨🚨');
-
-  callback(targetArticle);
-  saveArticle([...articles, targetArticle]);
+  saveArticle(articles);
 };
 
 export const bookmarkArticle = (targetId: number) =>
