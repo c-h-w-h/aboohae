@@ -127,6 +127,7 @@ const resetCss = css`
     width: 100vw;
     height: 100vh;
     line-height: 1;
+    background-color: #edeef0;
   }
 
   ol,
