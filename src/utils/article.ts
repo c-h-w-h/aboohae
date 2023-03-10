@@ -7,11 +7,11 @@ export const addArticle = (newArticle: Omit<Article, 'id' | 'bookmark'>) => {
 
   const article: Article = {
     ...newArticle,
-    id: articles.length ? articles[articles.length - 1].id : 0,
+    id: articles.length ? articles[articles.length - 1].id + 1 : 0,
     bookmark: false,
   };
 
-  setItem(ARTICLE_KEY, [...articles, article]);
+  saveArticle([...articles, article]);
 };
 
 const changeArticleProperty = (
@@ -22,10 +22,9 @@ const changeArticleProperty = (
   const targetArticle = articles.find(({ id }) => id === targetId);
 
   if (!targetArticle) throw new Error('찾는 아티클이 없습니다. 나쁜 유저 🚨🚨');
-  console.log(targetArticle);
 
   callback(targetArticle);
-  setItem(ARTICLE_KEY, [...articles, targetArticle]);
+  saveArticle([...articles, targetArticle]);
 };
 
 export const bookmarkArticle = (targetId: number) =>
@@ -50,4 +49,9 @@ export const getRandomArticle = (predicate?: (article: Article) => boolean) => {
 
   const randomIndex = Math.floor(Math.random() * filteredArticles.length);
   return filteredArticles[randomIndex];
+};
+
+export const saveArticle = (articles: Article[]) => {
+  const sortedArticles = articles.sort((a, b) => a.id - b.id);
+  setItem(ARTICLE_KEY, sortedArticles);
 };
