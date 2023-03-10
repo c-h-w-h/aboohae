@@ -29,7 +29,7 @@ const IndexPage = () => {
       <Flexbox justifyContent={'space-between'}>
         <Flexbox justifyContent={'start'}>
           {article.categories.map((category) => (
-            <Badge key={category} outline color={color.primary100}>
+            <Badge key={category} color={color.primary100} filled={false}>
               {category}
             </Badge>
           ))}
