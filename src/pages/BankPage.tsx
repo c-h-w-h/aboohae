@@ -8,6 +8,7 @@ import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react';
 
 const BankPage = () => {
   const [articles, setArticles] = useState<Article[] | null>(null);
+  const [selected, setSelected] = useState<number>(0);
   const tabMenu = useMemo(() => ['전체', '부채', '적금', '상환'], []);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const BankPage = () => {
     }
 
     setArticles(() => storedArticles);
+    setSelected(customTabIndex === undefined ? 0 : +customTabIndex);
   };
 
   return (
@@ -48,7 +50,7 @@ const BankPage = () => {
           <Button
             key={menu}
             text={menu}
-            variant={'light'}
+            variant={selected === idx ? 'dark' : 'light'}
             data-tab-index={idx}
             onClick={handleTabMenu}
           />
@@ -57,10 +59,12 @@ const BankPage = () => {
       <Spacing size={15} />
       <Flexbox justifyContent={'start'}>
         {Object.values(CATEGORY).map((c) => (
-          <Badge key={c}>{c}</Badge>
+          <Badge key={c} outline>
+            {c}
+          </Badge>
         ))}
       </Flexbox>
-      <Spacing size={15} />
+      <Spacing size={20} />
       <Flexbox flexDirection="column">
         {articles &&
           articles.map((article) => {
