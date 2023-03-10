@@ -1,7 +1,11 @@
 import { css, useTheme } from '@emotion/react';
-import { Outlet } from 'react-router-dom';
+import { ReactNode } from 'react';
 
-const MobileContainer = () => {
+interface MobileContainerProps {
+  children: ReactNode;
+}
+
+const MobileContainer = ({ children }: MobileContainerProps) => {
   const { color } = useTheme();
   const { white } = color;
 
@@ -13,16 +17,11 @@ const MobileContainer = () => {
     width: 100%;
     height: 100vh;
     margin: auto;
-    padding: 0 16px 50px 16px;
     overflow-y: auto;
     background-color: ${white};
   `;
 
-  return (
-    <div css={containerStyle}>
-      <Outlet />
-    </div>
-  );
+  return <div css={containerStyle}>{children}</div>;
 };
 
 export default MobileContainer;
