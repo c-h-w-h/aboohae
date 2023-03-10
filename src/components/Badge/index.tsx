@@ -32,7 +32,7 @@ const Badge = ({
   return (
     <BadgeContainer {...props}>
       <Center>
-        <Typography variant={size === 'large' ? 'body' : 'desc'}>
+        <Typography variant={size === 'large' ? 'body' : 'desc'} color={color}>
           {children}
         </Typography>
       </Center>
