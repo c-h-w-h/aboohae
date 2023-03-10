@@ -8,8 +8,7 @@ import { CATEGORY } from '@constants/category';
 import { css } from '@emotion/react';
 import { addArticle } from '@utils/article';
 import { FormEventHandler } from 'react';
-
-const CATEGORIES = Object.values(CATEGORY);
+import { useNavigate } from 'react-router-dom';
 
 import Checkbox from './Checkbox';
 
@@ -21,7 +20,11 @@ interface MetaResponse extends Response {
   image: string;
 }
 
+const CATEGORIES = Object.values(CATEGORY);
+
 const LoanForm = () => {
+  const navigate = useNavigate();
+
   const onSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
 
@@ -57,6 +60,8 @@ const LoanForm = () => {
       description,
     };
     addArticle(article);
+
+    navigate('/bank');
   };
 
   return (
