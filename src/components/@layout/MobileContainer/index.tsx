@@ -10,6 +10,7 @@ const MobileContainer = ({ children }: MobileContainerProps) => {
   const { white } = color;
 
   const containerStyle = css`
+    position: relative;
     display: flex;
     flex-direction: column;
     max-width: 640px;
