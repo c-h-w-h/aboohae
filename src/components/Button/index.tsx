@@ -49,7 +49,7 @@ const Button = ({
     border-radius: ${getBorderRadius(isSquare, isIconOnly)};
     color: ${isLight ? primary100 : white};
     background-color: ${isLight ? white : primary100};
-    ${isLight ? `border: 0.125rem solid ${primary100};` : ''}
+    border: 0.125rem solid ${primary100};
     text-decoration: none;
 
     & > svg,
