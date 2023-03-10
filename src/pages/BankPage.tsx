@@ -4,6 +4,7 @@ import Checkbox from '@components/Checkbox';
 import Spacing from '@components/Spacing';
 import Flexbox from '@components-layout/Flexbox';
 import { CATEGORY } from '@constants/category';
+import { css } from '@emotion/react';
 import { getArticles, readArticle, unreadArticle } from '@utils/article';
 import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react';
 
@@ -40,8 +41,8 @@ const BankPage = () => {
   };
 
   return (
-    <div>
-      <Flexbox justifyContent={'start'}>
+    <>
+      <Flexbox justifyContent={'flex-start'}>
         {tabMenu.map((menu, idx) => (
           <Button
             key={menu}
@@ -52,8 +53,8 @@ const BankPage = () => {
           />
         ))}
       </Flexbox>
-      <Spacing size={15} />
-      <Flexbox justifyContent={'start'}>
+      <Spacing size={20} />
+      <Flexbox justifyContent={'flex-start'}>
         {Object.values(CATEGORY).map((c) => (
           <Badge
             key={c}
@@ -65,8 +66,16 @@ const BankPage = () => {
           </Badge>
         ))}
       </Flexbox>
-      <Spacing size={20} />
-      <Flexbox flexDirection="column" alignItems={'flex-start'}>
+      <Spacing size={30} />
+      <Flexbox
+        flexDirection="column"
+        justifyContent={'flex-start'}
+        alignItems={'flex-start'}
+        css={css`
+          max-height: calc(100vh - 270px);
+          overflow-y: scroll;
+        `}
+      >
         {articles &&
           articles.map((article) => {
             const { id, title, readAt } = article;
@@ -80,12 +89,12 @@ const BankPage = () => {
                     readAt ? unreadArticle(id) : readArticle(id);
                   }}
                 />
-                <Spacing size={15} />
+                <Spacing size={10} />
               </Fragment>
             );
           })}
       </Flexbox>
-    </div>
+    </>
   );
 };
 
