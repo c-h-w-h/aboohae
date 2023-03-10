@@ -35,7 +35,7 @@ const BankPage = () => {
         );
         break;
       default:
-        break;
+      // filtering is NOT required when 0 (default)
     }
 
     setArticles(() => storedArticles);
@@ -58,7 +58,12 @@ const BankPage = () => {
       <Spacing size={15} />
       <Flexbox justifyContent={'start'}>
         {Object.values(CATEGORY).map((c) => (
-          <Badge key={c} outline>
+          <Badge
+            key={c}
+            filled={false}
+            toggle={true}
+            onClick={() => alert('준비중입니다!')}
+          >
             {c}
           </Badge>
         ))}
@@ -73,7 +78,7 @@ const BankPage = () => {
                 <Checkbox
                   value={id.toString()}
                   label={title}
-                  checked={readAt && true}
+                  checked={readAt === undefined ? false : true}
                   onChange={() => readArticle(id)}
                 />
                 <Spacing size={15} />

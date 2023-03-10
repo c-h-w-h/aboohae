@@ -11,6 +11,7 @@ interface BadgeProps {
   color?: string;
   filled?: boolean;
   toggle?: boolean;
+  onClick?: () => void;
 }
 
 const Badge = ({
@@ -19,6 +20,7 @@ const Badge = ({
   color,
   filled = true,
   toggle,
+  onClick,
 }: BadgeProps) => {
   const [isFilled, setIsFilled] = useState(filled);
   const onToggle = () => setIsFilled((prev) => !prev);
@@ -26,7 +28,10 @@ const Badge = ({
   const props = {
     color,
     filled: isFilled,
-    onClick: toggle ? onToggle : undefined,
+    onClick: () => {
+      if (toggle) onToggle();
+      if (onClick) onClick();
+    },
   };
 
   return (
