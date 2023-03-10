@@ -36,7 +36,8 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const { color: themeColor } = useTheme();
-  const { white, primary200, primary400, gray200 } = themeColor;
+
+  const { white, primary100, primary400, gray200 } = themeColor;
 
   const isLight = variant.includes('light');
   const isSquare = variant.includes('square');
@@ -46,9 +47,9 @@ const Button = ({
     width: fit-content;
     padding: 0.75rem;
     border-radius: ${getBorderRadius(isSquare, isIconOnly)};
-    color: ${isLight ? primary200 : white};
-    background-color: ${isLight ? white : primary200};
-    ${isLight ? `border: 0.125rem solid ${primary200};` : ''}
+    color: ${isLight ? primary100 : white};
+    background-color: ${isLight ? white : primary100};
+    ${isLight ? `border: 0.125rem solid ${primary100};` : ''}
     text-decoration: none;
 
     & > svg,
@@ -93,11 +94,11 @@ const Button = ({
         <Icon
           source={icon}
           size={iconSize}
-          color={isLight ? primary200 : white}
+          color={isLight ? primary100 : white}
         />
       )}
       {text && (
-        <Typography variant="body" color={isLight ? primary200 : white}>
+        <Typography variant="body" color={isLight ? primary100 : white}>
           {text}
         </Typography>
       )}
@@ -105,7 +106,7 @@ const Button = ({
         <Icon
           source={icon}
           size={iconSize}
-          color={isLight ? primary200 : white}
+          color={isLight ? primary100 : white}
         />
       )}
     </>
