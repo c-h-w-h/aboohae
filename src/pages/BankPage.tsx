@@ -32,7 +32,6 @@ const BankPage = () => {
                 value={id.toString()}
                 label={title}
                 checked={readAt && true}
-                onChange={(_) => null}
               />
               <Spacing size={15} />
             </Fragment>

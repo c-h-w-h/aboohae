@@ -37,8 +37,8 @@ const Checkbox = ({
         onChange={(e) => {
           if (onChange) {
             onChange(e.target.checked);
-            setIsChecked((isChecked) => !isChecked);
           }
+          setIsChecked((isChecked) => !isChecked);
         }}
       />
       <label
