@@ -9,8 +9,8 @@ interface ImageProps extends DefaultProps<HTMLImageElement> {
   shape?: ImageShapeVariant;
 }
 
-const Image = ({ src, alt, size, shape }: ImageProps) => {
-  return <ImageContainer {...{ src, alt, size, shape }} />;
+const Image = ({ src, alt, size, shape, ...props }: ImageProps) => {
+  return <ImageContainer {...{ src, alt, size, shape }} {...props} />;
 };
 
 export default Image;
