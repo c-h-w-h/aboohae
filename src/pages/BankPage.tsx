@@ -4,7 +4,7 @@ import Checkbox from '@components/Checkbox';
 import Spacing from '@components/Spacing';
 import Flexbox from '@components-layout/Flexbox';
 import { CATEGORY } from '@constants/category';
-import { getArticles, readArticle } from '@utils/article';
+import { getArticles, readArticle, unreadArticle } from '@utils/article';
 import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react';
 
 const BankPage = () => {
@@ -17,29 +17,26 @@ const BankPage = () => {
     setArticles(() => storedArticles);
   }, []);
 
+  const getPredicate = (tab: string) => {
+    switch (tab) {
+      case '부채':
+        return (article: Article) => article.readAt === undefined;
+      case '적금':
+        return (article: Article) => article.bookmark;
+      case '상환':
+        return (article: Article) => article.readAt !== undefined;
+      default:
+        return undefined;
+    }
+  };
+
   const handleTabMenu = (e: MouseEvent<HTMLButtonElement>) => {
     const customTabIndex = e.currentTarget.dataset.tabIndex;
-    let storedArticles = JSON.parse(localStorage.getItem('articles') ?? '');
-    switch (customTabIndex) {
-      case '1':
-        storedArticles = getArticles(
-          (article: Article) => article.readAt === undefined,
-        );
-        break;
-      case '2':
-        storedArticles = getArticles((article: Article) => article.bookmark);
-        break;
-      case '3':
-        storedArticles = getArticles(
-          (article: Article) => article.readAt !== undefined,
-        );
-        break;
-      default:
-      // filtering is NOT required when 0 (default)
-    }
+    if (!customTabIndex) return;
 
-    setArticles(() => storedArticles);
-    setSelected(customTabIndex === undefined ? 0 : +customTabIndex);
+    const currentIndex = +customTabIndex;
+    setArticles(() => getArticles(getPredicate(tabMenu[currentIndex])));
+    setSelected(customTabIndex === undefined ? 0 : currentIndex);
   };
 
   return (
@@ -79,7 +76,9 @@ const BankPage = () => {
                   value={id.toString()}
                   label={title}
                   checked={readAt === undefined ? false : true}
-                  onChange={() => readArticle(id)}
+                  onChange={() => {
+                    readAt ? unreadArticle(id) : readArticle(id);
+                  }}
                 />
                 <Spacing size={15} />
               </Fragment>

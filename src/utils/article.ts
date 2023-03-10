@@ -40,6 +40,11 @@ export const readArticle = (targetId: number) =>
     article.readAt = new Date().toString();
   });
 
+export const unreadArticle = (targetId: number) =>
+  changeArticleProperty(targetId, (article) => {
+    article.readAt = undefined;
+  });
+
 export const getArticles = (predicate?: (article: Article) => boolean) => {
   const articles = getItem<Article[]>(ARTICLE_KEY) ?? [];
   return predicate ? articles.filter(predicate) : articles;
