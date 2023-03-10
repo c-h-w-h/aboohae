@@ -8,10 +8,12 @@ import { CATEGORY } from '@constants/category';
 import { css } from '@emotion/react';
 import { FormEventHandler } from 'react';
 
+const CATEGORIES = Object.values(CATEGORY);
+
 import Checkbox from './Checkbox';
 
 const LoanForm = () => {
-  const onSubmit: FormEventHandler = (e) => {
+  const onSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
@@ -20,6 +22,9 @@ const LoanForm = () => {
     const formData = new FormData(form);
 
     // process data here
+
+    const url = formData.get('link');
+    if (!url) return;
   };
 
   return (
@@ -27,7 +32,6 @@ const LoanForm = () => {
       as="form"
       flexDirection="column"
       alignItems="flex-start"
-      css={containerStyle}
       onSubmit={onSubmit}
     >
       <Spacing size={20} />
@@ -41,6 +45,7 @@ const LoanForm = () => {
         placeholder="링크를 입력해요~"
         variant={'subtitle2'}
         width={'100%'}
+        required
       />
 
       <Spacing size={40} />
@@ -48,7 +53,7 @@ const LoanForm = () => {
         <Typography variant="subtitle2">😆 빌릴 카테고리를 선택해요</Typography>
       </label>
       <Flexbox gap={'0.5rem'}>
-        {Object.values(CATEGORY).map((category) => (
+        {CATEGORIES.map((category) => (
           <Checkbox
             key={category}
             id={category}
@@ -66,11 +71,6 @@ const LoanForm = () => {
     </Flexbox>
   );
 };
-
-const containerStyle = css`
-  width: 90%;
-  margin: auto;
-`;
 
 const width100 = css`
   width: 100%;
