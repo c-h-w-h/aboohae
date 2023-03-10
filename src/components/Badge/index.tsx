@@ -22,7 +22,7 @@ const Badge = ({
   return (
     <BadgeContainer {...{ outline, color, filled }}>
       <Center>
-        <Typography variant={size === 'large' ? 'body' : 'desc'}>
+        <Typography variant={size === 'large' ? 'body' : 'desc'} color={color}>
           {children}
         </Typography>
       </Center>
