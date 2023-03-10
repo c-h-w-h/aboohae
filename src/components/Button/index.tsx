@@ -97,11 +97,7 @@ const Button = ({
           color={isLight ? primary100 : white}
         />
       )}
-      {text && (
-        <Typography variant="body" color={isLight ? primary100 : white}>
-          {text}
-        </Typography>
-      )}
+      {text && <Typography variant="body">{text}</Typography>}
       {icon && iconPosition === 'right' && (
         <Icon
           source={icon}

@@ -1,26 +1,36 @@
 import Typography from '@components/Typography';
 import Center from '@components-layout/Center';
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 type BadgeSize = 'large' | 'small';
 
 interface BadgeProps {
   children: string;
   size?: BadgeSize;
-  outline?: boolean;
   color?: string;
   filled?: boolean;
+  toggle?: boolean;
 }
 
 const Badge = ({
   children,
   size = 'small',
-  outline = false,
   color,
-  filled = false,
+  filled = true,
+  toggle,
 }: BadgeProps) => {
+  const [isFilled, setIsFilled] = useState(filled);
+  const onToggle = () => setIsFilled((prev) => !prev);
+
+  const props = {
+    color,
+    filled: isFilled,
+    onClick: toggle ? onToggle : undefined,
+  };
+
   return (
-    <BadgeContainer {...{ outline, color, filled }}>
+    <BadgeContainer {...props}>
       <Center>
         <Typography variant={size === 'large' ? 'body' : 'desc'} color={color}>
           {children}
@@ -33,7 +43,7 @@ const Badge = ({
 export default Badge;
 
 const BadgeContainer = styled.div<Omit<BadgeProps, 'children' | 'size'>>(
-  ({ theme, outline, color, filled }) => {
+  ({ theme, color, filled }) => {
     const { color: themeColor } = theme;
     const { white, primary100 } = themeColor;
 
@@ -41,7 +51,7 @@ const BadgeContainer = styled.div<Omit<BadgeProps, 'children' | 'size'>>(
       width: 'fit-content',
       padding: '8px 12px',
       borderRadius: 30,
-      border: outline ? `1px solid ${color ?? primary100}` : 'none',
+      border: filled ? 'none' : `1px solid ${color ?? primary100}`,
       color: filled ? white : color ?? primary100,
       backgroundColor: filled ? color ?? primary100 : 'transparent',
 
