@@ -4,5 +4,7 @@ declare interface Article {
   title: string;
   categories: string[];
   bookmark: boolean;
-  readAt?: Date;
+  readAt?: string;
+  thumbnail: string;
+  description: string;
 }
