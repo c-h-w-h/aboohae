@@ -35,6 +35,9 @@ const IndexPage = () => {
           ))}
         </Flexbox>
         <MdBookmark
+          css={css`
+            cursor: pointer;
+          `}
           size={30}
           color={article.bookmark ? color.primary100 : color.gray100}
           onClick={() => {
