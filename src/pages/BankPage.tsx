@@ -4,6 +4,7 @@ import Checkbox from '@components/Checkbox';
 import Spacing from '@components/Spacing';
 import Flexbox from '@components-layout/Flexbox';
 import { CATEGORY } from '@constants/category';
+import { getArticles, readArticle } from '@utils/article';
 import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react';
 
 const BankPage = () => {
@@ -21,18 +22,16 @@ const BankPage = () => {
     let storedArticles = JSON.parse(localStorage.getItem('articles') ?? '');
     switch (customTabIndex) {
       case '1':
-        storedArticles = storedArticles.filter(
+        storedArticles = getArticles(
           (article: Article) => article.readAt === undefined,
         );
         break;
       case '2':
-        storedArticles = storedArticles.filter(
-          (article: Article) => article.bookmark,
-        );
+        storedArticles = getArticles((article: Article) => article.bookmark);
         break;
       case '3':
-        storedArticles = storedArticles.filter(
-          (article: Article) => article.readAt,
+        storedArticles = getArticles(
+          (article: Article) => article.readAt !== undefined,
         );
         break;
       default:
@@ -65,7 +64,7 @@ const BankPage = () => {
         ))}
       </Flexbox>
       <Spacing size={20} />
-      <Flexbox flexDirection="column">
+      <Flexbox flexDirection="column" alignItems={'flex-start'}>
         {articles &&
           articles.map((article) => {
             const { id, title, readAt } = article;
@@ -75,6 +74,7 @@ const BankPage = () => {
                   value={id.toString()}
                   label={title}
                   checked={readAt && true}
+                  onChange={() => readArticle(id)}
                 />
                 <Spacing size={15} />
               </Fragment>
