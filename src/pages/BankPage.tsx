@@ -4,16 +4,54 @@ import Checkbox from '@components/Checkbox';
 import Spacing from '@components/Spacing';
 import Flexbox from '@components-layout/Flexbox';
 import { CATEGORY } from '@constants/category';
-import { Fragment } from 'react';
+import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react';
 
 const BankPage = () => {
-  const tabMenu = ['전체', '부채', '적금', '상환'];
+  const [articles, setArticles] = useState<Article[] | null>(null);
+  const tabMenu = useMemo(() => ['전체', '부채', '적금', '상환'], []);
+
+  useEffect(() => {
+    const storedArticles = JSON.parse(localStorage.getItem('articles') ?? '');
+    setArticles(() => storedArticles);
+  }, []);
+
+  const handleTabMenu = (e: MouseEvent<HTMLButtonElement>) => {
+    const customTabIndex = e.currentTarget.dataset.tabIndex;
+    let storedArticles = JSON.parse(localStorage.getItem('articles') ?? '');
+    switch (customTabIndex) {
+      case '1':
+        storedArticles = storedArticles.filter(
+          (article: Article) => article.readAt === undefined,
+        );
+        break;
+      case '2':
+        storedArticles = storedArticles.filter(
+          (article: Article) => article.bookmark,
+        );
+        break;
+      case '3':
+        storedArticles = storedArticles.filter(
+          (article: Article) => article.readAt,
+        );
+        break;
+      default:
+        break;
+    }
+
+    setArticles(() => storedArticles);
+  };
 
   return (
     <div>
       <Flexbox justifyContent={'start'}>
-        {tabMenu.map((menu) => (
-          <Button key={menu} text={menu} />
+        {tabMenu.map((menu, idx) => (
+          <Button
+            key={menu}
+            text={menu}
+            variant={'light'}
+            data-tab-index={idx}
+            onClick={handleTabMenu}
+          />
         ))}
       </Flexbox>
       <Spacing size={15} />
@@ -24,59 +62,23 @@ const BankPage = () => {
       </Flexbox>
       <Spacing size={15} />
       <Flexbox flexDirection="column">
-        {DUMMY_ARTICLES.map((article) => {
-          const { id, title, readAt } = article;
-          return (
-            <Fragment key={id}>
-              <Checkbox
-                value={id.toString()}
-                label={title}
-                checked={readAt && true}
-              />
-              <Spacing size={15} />
-            </Fragment>
-          );
-        })}
+        {articles &&
+          articles.map((article) => {
+            const { id, title, readAt } = article;
+            return (
+              <Fragment key={id}>
+                <Checkbox
+                  value={id.toString()}
+                  label={title}
+                  checked={readAt && true}
+                />
+                <Spacing size={15} />
+              </Fragment>
+            );
+          })}
       </Flexbox>
     </div>
   );
 };
 
 export default BankPage;
-
-const DUMMY_ARTICLES: Article[] = [
-  {
-    id: 1,
-    link: 'www.naver.com',
-    title:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-    categories: ['JavaScript', 'TypeScript'],
-    bookmark: false,
-    readAt: new Date(),
-  },
-  {
-    id: 2,
-    link: 'www.naver.com',
-    title:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-    categories: ['DesignSystem'],
-    bookmark: false,
-    readAt: new Date(),
-  },
-  {
-    id: 3,
-    link: 'www.naver.com',
-    title:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-    categories: ['JavaScript', 'TypeScript'],
-    bookmark: false,
-  },
-  {
-    id: 4,
-    link: 'www.naver.com',
-    title:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore',
-    categories: [],
-    bookmark: false,
-  },
-];
