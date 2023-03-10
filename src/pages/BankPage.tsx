@@ -4,7 +4,8 @@ import Checkbox from '@components/Checkbox';
 import Spacing from '@components/Spacing';
 import Flexbox from '@components-layout/Flexbox';
 import { CATEGORY } from '@constants/category';
-import { getArticles, readArticle } from '@utils/article';
+import { css } from '@emotion/react';
+import { getArticles, readArticle, unreadArticle } from '@utils/article';
 import { Fragment, MouseEvent, useEffect, useMemo, useState } from 'react';
 
 const BankPage = () => {
@@ -17,34 +18,31 @@ const BankPage = () => {
     setArticles(() => storedArticles);
   }, []);
 
+  const getPredicate = (tab: string) => {
+    switch (tab) {
+      case '부채':
+        return (article: Article) => article.readAt === undefined;
+      case '적금':
+        return (article: Article) => article.bookmark;
+      case '상환':
+        return (article: Article) => article.readAt !== undefined;
+      default:
+        return undefined;
+    }
+  };
+
   const handleTabMenu = (e: MouseEvent<HTMLButtonElement>) => {
     const customTabIndex = e.currentTarget.dataset.tabIndex;
-    let storedArticles = JSON.parse(localStorage.getItem('articles') ?? '');
-    switch (customTabIndex) {
-      case '1':
-        storedArticles = getArticles(
-          (article: Article) => article.readAt === undefined,
-        );
-        break;
-      case '2':
-        storedArticles = getArticles((article: Article) => article.bookmark);
-        break;
-      case '3':
-        storedArticles = getArticles(
-          (article: Article) => article.readAt !== undefined,
-        );
-        break;
-      default:
-      // filtering is NOT required when 0 (default)
-    }
+    if (!customTabIndex) return;
 
-    setArticles(() => storedArticles);
-    setSelected(customTabIndex === undefined ? 0 : +customTabIndex);
+    const currentIndex = +customTabIndex;
+    setArticles(() => getArticles(getPredicate(tabMenu[currentIndex])));
+    setSelected(customTabIndex === undefined ? 0 : currentIndex);
   };
 
   return (
-    <div>
-      <Flexbox justifyContent={'start'}>
+    <>
+      <Flexbox justifyContent={'flex-start'}>
         {tabMenu.map((menu, idx) => (
           <Button
             key={menu}
@@ -55,8 +53,8 @@ const BankPage = () => {
           />
         ))}
       </Flexbox>
-      <Spacing size={15} />
-      <Flexbox justifyContent={'start'}>
+      <Spacing size={20} />
+      <Flexbox justifyContent={'flex-start'}>
         {Object.values(CATEGORY).map((c) => (
           <Badge
             key={c}
@@ -68,8 +66,16 @@ const BankPage = () => {
           </Badge>
         ))}
       </Flexbox>
-      <Spacing size={20} />
-      <Flexbox flexDirection="column" alignItems={'flex-start'}>
+      <Spacing size={30} />
+      <Flexbox
+        flexDirection="column"
+        justifyContent={'flex-start'}
+        alignItems={'flex-start'}
+        css={css`
+          max-height: calc(100vh - 270px);
+          overflow-y: scroll;
+        `}
+      >
         {articles &&
           articles.map((article) => {
             const { id, title, readAt } = article;
@@ -79,14 +85,16 @@ const BankPage = () => {
                   value={id.toString()}
                   label={title}
                   checked={readAt === undefined ? false : true}
-                  onChange={() => readArticle(id)}
+                  onChange={() => {
+                    readAt ? unreadArticle(id) : readArticle(id);
+                  }}
                 />
-                <Spacing size={15} />
+                <Spacing size={10} />
               </Fragment>
             );
           })}
       </Flexbox>
-    </div>
+    </>
   );
 };
 
