@@ -15,7 +15,12 @@ const Checkbox = ({ id, label }: CheckboxProps) => {
       <label htmlFor={id} onClick={onClick}>
         {label}
       </label>
-      <InvisibleInput type="checkbox" defaultChecked={isChecked} />
+      <InvisibleInput
+        id={id}
+        name={id}
+        type="checkbox"
+        defaultChecked={isChecked}
+      />
     </>
   );
 };

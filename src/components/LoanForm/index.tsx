@@ -6,11 +6,20 @@ import Typography from '@components/Typography';
 import Flexbox from '@components-layout/Flexbox';
 import { CATEGORY } from '@constants/category';
 import { css } from '@emotion/react';
+import { addArticle } from '@utils/article';
 import { FormEventHandler } from 'react';
 
 const CATEGORIES = Object.values(CATEGORY);
 
 import Checkbox from './Checkbox';
+
+import env from '@/config';
+
+interface MetaResponse extends Response {
+  title: string;
+  description: string;
+  image: string;
+}
 
 const LoanForm = () => {
   const onSubmit: FormEventHandler = async (e) => {
@@ -21,10 +30,33 @@ const LoanForm = () => {
 
     const formData = new FormData(form);
 
-    // process data here
-
     const url = formData.get('link');
     if (!url) return;
+
+    const encodedURL = encodeURIComponent(`${url}`);
+    const res = await fetch(`${env.API_PATH}/meta?url=${encodedURL}`, {
+      mode: 'cors',
+    });
+    const data = await res.json();
+
+    const { title, description, image: thumbnail } = data as MetaResponse;
+
+    const categories: string[] = [];
+    CATEGORIES.forEach((category) => {
+      const checked = formData.get(category);
+      if (checked) {
+        categories.push(category);
+      }
+    });
+
+    const article = {
+      link: `${url}`,
+      title,
+      categories,
+      thumbnail,
+      description,
+    };
+    addArticle(article);
   };
 
   return (

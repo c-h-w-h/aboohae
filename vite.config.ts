@@ -37,6 +37,10 @@ export default defineConfig({
         find: '@util-types',
         replacement: resolve(__dirname, './src/utils/types'),
       },
+      {
+        find: '@',
+        replacement: resolve(__dirname, './src'),
+      },
     ],
   },
 });
