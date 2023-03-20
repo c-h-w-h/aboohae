@@ -35,7 +35,7 @@ router.get('/', async (req: Request<{ url?: string }>, res) => {
 
         return prev;
       },
-      { title, description: title, image: '' }
+      { title, description: title, image: undefined },
     );
 
     res.status(200).json(meta);
