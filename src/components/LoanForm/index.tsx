@@ -56,7 +56,7 @@ const LoanForm = () => {
       link: `${url}`,
       title,
       categories,
-      thumbnail,
+      thumbnail: thumbnail ?? '/default.png',
       description,
     };
     addArticle(article);
